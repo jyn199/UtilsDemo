@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.Activity;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jyn.beans.Demo;
+import com.jyn.utils.JsonParserDemo;
 import com.jyn.utils.XmlPullParserDemo;
 
 public class MainActivity extends Activity {
@@ -31,17 +33,17 @@ public class MainActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		
-		parserXml();
 
+//		parserXml();
+		parserJson();
 	}
-	
-	private void parserXml(){
+
+	private void parserXml() {
 		InputStream in = null;
 		try {
 			in = getAssets().open("demo.xml");
 			List<Demo> demos = XmlPullParserDemo.xmlParserDemo(in);
-			
+
 			for (Demo d : demos) {
 				System.out.println("id:" + d.id + ",name:" + d.name + "===");
 			}
@@ -49,8 +51,8 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally{
-			if(in != null){
+		} finally {
+			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
@@ -59,9 +61,20 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
-	
-	
-	
+
+	private void parserJson() {
+		String json = "[{\"id\":11, \"name\":\"demo11\"}, {\"id\":22, \"name\":\"demo22\"}]";
+		List<Demo> demos;
+		try {
+			demos = JsonParserDemo.parseJson(json);
+			for (Demo d : demos) {
+				System.out.println("id:" + d.id + ",name:" + d.name + "===");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
